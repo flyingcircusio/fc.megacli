@@ -1,13 +1,9 @@
 import argparse
-import csv
 import hurry.filesize
 import megacli
 import os
-import pprint
 import re
 import subprocess
-import StringIO
-import sys
 import terminaltables
 
 
@@ -51,7 +47,7 @@ def summary():
                 if searchstring in str(value):
                     drives_found.append(drive)
         return drives_found
-    
+
     def search_logicaldrives(logicaldrives, searchstring):
         lds_found = []
         for ld in logicaldrives:
@@ -59,7 +55,7 @@ def summary():
                 if searchstring in str(value):
                     lds_found.append(ld)
         return lds_found
-   
+
     def get_logicaldrive_param(logicaldevice_id, param):
         for ld in logicaldrives:
             if logicaldevice_id in str(ld['id']):
@@ -113,7 +109,7 @@ def summary():
        if "scsi" in line:
            # get the logical device id which is part of the /dev/disk/by-path
            # string
-           match = re.search('scsi-[0-9]:[0-9]:([0-9]):[0-9]', line)
+           match = re.search('scsi-[0-9]:[0-9]:([0-9][0-9]*):[0-9]', line)
            if match:
                logicaldevice_id = match.group(1)
            # get the corresponding Linux device name
@@ -153,7 +149,7 @@ def summary():
                                         disk['drive_has_flagged_a_smart_alert'])
                    else:
                        member_status += 'OK\n'
-               
+
                for part, mounts in get_mountpoints(device_name).iteritems():
                    device_mountspoints += '{} @ {}\n'.format(part, mounts)
 
@@ -163,6 +159,6 @@ def summary():
                                                        ld_raid_level),
                                   ld_status,
                                   member_params, member_status])
-    
+
     table = terminaltables.SingleTable(table_data)
     print table.table
