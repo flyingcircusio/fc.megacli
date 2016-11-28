@@ -174,6 +174,22 @@ def summary():
                                   ld_status,
                                   member_params, member_status])
 
+    # gather unconfigured drives and add them to the table, too
+    for drive in physicaldrives:
+        if 'unconfigured' in drive['firmware_state'].strip():
+            member_params = '[{}:{}] {} ({})\n'.format(
+                drive['enclosure_id'],
+                drive['slot_number'],
+                hurry.filesize.size(drive['raw_size']),
+                ' '.join(drive['inquiry_data'].upper().split()))
+            member_status = 'FW state: {}\nMedia Errors: {}\n' \
+                'SMART alert: {}'.format(
+                drive['firmware_state'],
+                drive['media_error_count'],
+                drive['drive_has_flagged_a_smart_alert'])
+            table_data.append(['N/A', 'N/A', 'N/A', 'N/A',
+                              member_params, member_status])
+
     print '\n\n\n=======\nWARNING\n=======\nfc-megacli expects exactly 1 LSI ' \
           'controller and 1 enclosure!\nIn case you have multiple ' \
           'controllers and/or enclosures installed,\nDO NOT TRUST fc-megacli ' \
