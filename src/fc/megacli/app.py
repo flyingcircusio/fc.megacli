@@ -119,6 +119,14 @@ def summary():
            match = re.search('(sd[a-zA-Z])', line)
            if match:
                device_name = match.group(1)
+           # deal wiht non-LSI devices
+           if not logicaldevice_id and device_name:
+               for part, mounts in get_mountpoints(device_name).iteritems():
+                   device_mountspoints += '{} @ {}\n'.format(part, mounts)
+               if not search_nested_structure(table_data, device_name):
+                   table_data.append([device_name, device_mountspoints,
+                                     'non-LSI', 'N/A', 'N/A', 'N/A'])
+               continue
            # gather data about LD
            ld_raid_level = get_logicaldrive_param(logicaldevice_id,
                                                   'raid_level')
