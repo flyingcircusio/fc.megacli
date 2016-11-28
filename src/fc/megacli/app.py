@@ -111,7 +111,8 @@ def summary():
        if "scsi" in line:
            # get the logical device id which is part of the /dev/disk/by-path
            # string
-           match = re.search('scsi-[0-9]:[0-9]:([0-9][0-9]*):[0-9]', line)
+           match = re.search('^.*pci-[0-9]{4}:[0-9]{2}:[0-9]{2}\.[0-9]-scsi-' \
+                             '[0-9]:[0-9]:([0-9][0-9]*):[0-9]', line)
            if match:
                logicaldevice_id = match.group(1)
            # get the corresponding Linux device name
@@ -119,11 +120,14 @@ def summary():
            if match:
                device_name = match.group(1)
            # gather data about LD
-           ld_raid_level = get_logicaldrive_param(logicaldevice_id, 'raid_level')
+           ld_raid_level = get_logicaldrive_param(logicaldevice_id,
+                                                  'raid_level')
            ld_state = get_logicaldrive_param(logicaldevice_id, 'state')
-           ld_bad_block_exist = get_logicaldrive_param(logicaldevice_id, 'bad_blocks_exist')
+           ld_bad_block_exist = get_logicaldrive_param(logicaldevice_id,
+                                                       'bad_blocks_exist')
            if ld_state.strip() != 'optimal' or ld_bad_block_exist:
-               ld_status = 'LD state: {}\nBad blocks: {}'.format(ld_state, ld_bad_block_exist)
+               ld_status = 'LD state: {}\nBad blocks: {}'.format(
+                   ld_state, ld_bad_block_exist)
            else:
                ld_status = 'OK'
            # avoid duplicates (partitions, respecively. E.g. sda1, sda2, etc.
