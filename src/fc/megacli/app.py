@@ -61,7 +61,7 @@ def summary():
     def get_logicaldrive_param(logicaldevice_id, param):
         for ld in logicaldrives:
             if logicaldevice_id == str(ld['id']):
-                return ld[param]
+                return ld.get(param)
 
     def get_mountpoints(device):
         mountpoints_found = {}
