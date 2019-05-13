@@ -1,10 +1,19 @@
 import argparse
-import hurry.filesize
 import megacli
 import os
 import re
 import subprocess
 import terminaltables
+
+
+def size(nbytes):
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    i = 0
+    while nbytes >= 1024 and i < len(suffixes)-1:
+        nbytes /= 1024.
+        i += 1
+    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (f, suffixes[i])
 
 
 def summary():
@@ -35,7 +44,7 @@ def summary():
          'Linux\nMountpoints',
          'LSI LD',
          'LSI\nLD\nStatus',
-         'LSI PDs\n[E:S] Size (Inquiry data)',
+         'LSI PDs\n[E:S] DID Size (Inquiry data)',
          'LSI\nPD\nStatus']
     ]
 
@@ -62,6 +71,17 @@ def summary():
         for ld in logicaldrives:
             if logicaldevice_id == str(ld['id']):
                 return ld[param]
+
+    def get_smart_data(did):
+        c = subprocess.Popen(['smartctl', '--all', '/dev/bus/0', '-d', 'megaraid,{}'.format(did)], stdout=subprocess.PIPE)
+        stdout, stderr = c.communicate()
+        fast_errors, slow_errors = None, None
+        for line in stdout.splitlines():
+                if line.startswith('read: ') or line.startswith('write: ') or line.startswith('verify: '):
+                        result = line.split()
+                        fast_errors = (fast_errors or 0) + int(result[1])
+                        slow_errors= (slow_errors or 0) + int(result[2])
+        return fast_errors, slow_errors
 
     def get_mountpoints(device):
         mountpoints_found = {}
@@ -147,12 +167,15 @@ def summary():
                        'slot_number',
                        slot))
                for disk in member_disks:
-                   member_params += '[{}:{}] {} ({})\n'.format(
+                   fast_errors, slow_errors = get_smart_data(disk['device_id'])
+                   member_params += '[{}:{}] {} {} ({})\n{} fast, {} slow\n'.format(
                                     disk['enclosure_id'],
                                     disk['slot_number'],
-                    hurry.filesize.size(disk['raw_size']),
+                                    disk['device_id'],
+                                    size(disk['raw_size']),
                                         ' '.join(
-                                        disk['inquiry_data'].upper().split()))
+                                        disk['inquiry_data'].upper().split()),
+                                    fast_errors, slow_errors)
                    if (disk['firmware_state'].strip() != 'online, spun up' or
                        disk['media_error_count'] or
                        disk['drive_has_flagged_a_smart_alert']):
@@ -177,10 +200,11 @@ def summary():
     # gather unconfigured drives and add them to the table, too
     for drive in physicaldrives:
         if 'unconfigured' in drive['firmware_state'].strip():
-            member_params = '[{}:{}] {} ({})\n'.format(
+            member_params = '[{}:{}] {} {} ({})\n'.format(
                 drive['enclosure_id'],
                 drive['slot_number'],
-                hurry.filesize.size(drive['raw_size']),
+                drive['device_id'],
+                size(drive['raw_size']),
                 ' '.join(drive['inquiry_data'].upper().split()))
             member_status = 'FW state: {}\nMedia Errors: {}\n' \
                 'SMART alert: {}'.format(
