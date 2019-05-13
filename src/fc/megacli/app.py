@@ -70,7 +70,7 @@ def summary():
     def get_logicaldrive_param(logicaldevice_id, param):
         for ld in logicaldrives:
             if logicaldevice_id == str(ld['id']):
-                return ld[param]
+                return ld.get(param)
 
     def get_smart_data(did):
         c = subprocess.Popen(['smartctl', '--all', '/dev/bus/0', '-d', 'megaraid,{}'.format(did)], stdout=subprocess.PIPE)
