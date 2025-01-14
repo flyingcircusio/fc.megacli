@@ -1,0 +1,28 @@
+[project]
+name = "fc-megacli"
+version = "0.1.0"
+description = "Utilities for Broadcom/LSI/Avago controllers."
+author = "Flying Circus"
+author_email = "mail@flyingcircus.io"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "hurry.filesize>=0.9",
+    "megacli>=0.0.6",
+    "terminaltables>=3.1.0",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3.9",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+]
+
+[project.scripts]
+fc-megacli  = "fc.megacli.app:summary"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fc"]

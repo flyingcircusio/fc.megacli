@@ -1,0 +1,52 @@
+version = 1
+requires-python = ">=3.10"
+
+[[package]]
+name = "fc-megacli"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "hurry-filesize" },
+    { name = "megacli" },
+    { name = "terminaltables" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hurry-filesize", specifier = ">=0.9" },
+    { name = "megacli", specifier = ">=0.0.6" },
+    { name = "terminaltables", specifier = ">=3.1.0" },
+]
+
+[[package]]
+name = "hurry-filesize"
+version = "0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "setuptools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ee/5e/16e17bedcf54d5b618dc0771690deda77178e5c310402881c3d2d6c5f27c/hurry.filesize-0.9.tar.gz", hash = "sha256:f5368329adbef86accd3bc9490522340bb79260455ae89b1a42c10f63801b9a6", size = 2810 }
+
+[[package]]
+name = "megacli"
+version = "0.0.11"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5c/1d/2fcae1865290b21fbc018dd24895b16c60d1ebbc6e3b0b0bcb824d82a83b/megacli-0.0.11.tar.gz", hash = "sha256:7051d7dd496ca65b14a8a4c5c1c992daaf9df773b5819f10b9e6adbbd2f58b40", size = 4176 }
+
+[[package]]
+name = "setuptools"
+version = "75.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/ec/089608b791d210aec4e7f97488e67ab0d33add3efccb83a056cbafe3a2a6/setuptools-75.8.0.tar.gz", hash = "sha256:c5afc8f407c626b8313a86e10311dd3f661c6cd9c09d4bf8c15c0e11f9f2b0e6", size = 1343222 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/69/8a/b9dc7678803429e4a3bc9ba462fa3dd9066824d3c607490235c6a796be5a/setuptools-75.8.0-py3-none-any.whl", hash = "sha256:e3982f444617239225d675215d51f6ba05f845d4eec313da4418fdbb56fb27e3", size = 1228782 },
+]
+
+[[package]]
+name = "terminaltables"
+version = "3.1.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f5/fc/0b73d782f5ab7feba8d007573a3773c58255f223c5940a7b7085f02153c3/terminaltables-3.1.10.tar.gz", hash = "sha256:ba6eca5cb5ba02bba4c9f4f985af80c54ec3dccf94cfcd190154386255e47543", size = 12264 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/fb/ea621e0a19733e01fe4005d46087d383693c0f4a8f824b47d8d4122c87e0/terminaltables-3.1.10-py2.py3-none-any.whl", hash = "sha256:e4fdc4179c9e4aab5f674d80f09d76fa436b96fdc698a8505e0a36bf0804a874", size = 15155 },
+]
