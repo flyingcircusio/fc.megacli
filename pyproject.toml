@@ -7,7 +7,6 @@ author_email = "mail@flyingcircus.io"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hurry.filesize>=0.9",
     "megacli>=0.0.6",
     "terminaltables>=3.1.0",
 ]
