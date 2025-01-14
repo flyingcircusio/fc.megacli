@@ -1,7 +1,7 @@
 import argparse
-import distutils.spawn
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -29,7 +29,7 @@ def summary():
 
     parser.add_argument(
         "--megacli_path",
-        default=distutils.spawn.find_executable("MegaCli64"),
+        default=shutil.which("MegaCli64"),
         help="Path to MegaCli or MegaCli64 (default %(default)s)",
     )
     args = parser.parse_args()
